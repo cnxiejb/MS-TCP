@@ -1,0 +1,16 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
+PROJECT(MS_TCP)
+add_definitions(-std=gnu++11)
+set(CMAKE_CXX_COMPILER "clang++")
+set(CMAKE_CXX_FLAGS "-std=gnu++11")
+set(CMAKE_BUILD_TYPE Release)
+
+add_subdirectory(Network)
+add_subdirectory(AudioModule)
+add_subdirectory(VideoModule)
+aux_source_directory(. SRC_LIST)
+
+ADD_EXECUTABLE(MS_TCP ${SRC_LIST})
+target_link_libraries(MS_TCP Network)
+target_link_libraries(MS_TCP AudioModule)
+target_link_libraries(MS_TCP VideoModule)

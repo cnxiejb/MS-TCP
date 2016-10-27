@@ -3,7 +3,10 @@
 
 class videoInterface
 {
-    virtual int init()=0;
-    virtual int Uninit()=0;
+    public:
+        virtual int init()=0;
+        virtual int Uninit()=0;
+
+        void process(int type);
 };
 #endif

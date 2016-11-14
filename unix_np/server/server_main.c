@@ -1,11 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-
 #include "sys_network.h"
 #include "sys_define.h"
 #include "child_process.h"
+#include "sys_signal.h"
 
 int main(int argc,char **argv)
 {
@@ -33,7 +29,8 @@ int main(int argc,char **argv)
         return -2;
     }
     listen(listenfd,LISTENQ); 
-    
+    signal(SIGCHLD,sig_child);//signal function
+
     for(;;){
         chilen = sizeof(childaddr);
         connfd = accept(listenfd,(struct sockaddr *)&childaddr,&chilen);

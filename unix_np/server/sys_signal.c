@@ -1,3 +1,4 @@
+#include "sys_define.h"
 #include "sys_signal.h"
 
 Sigfunc * signal(int signo,Sigfunc *func)
@@ -18,4 +19,13 @@ Sigfunc * signal(int signo,Sigfunc *func)
     if(sigaction(signo,&act,&oact) < 0)
         return(SIG_ERR);
     return oact.sa_handler;
+}
+void sig_child(int signo)
+{
+    pid_t pid;
+    int stat;
+
+    pid = wait(&stat);
+    printf("child %d terminated\n",pid);
+    return;
 }

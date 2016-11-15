@@ -10,4 +10,8 @@
 #include <unistd.h>
 #include <string.h>
 
+#include <sys/select.h>
+#include <time.h>
+
+#define max( a, b ) ( ( a > b) ? a : b )
 #endif

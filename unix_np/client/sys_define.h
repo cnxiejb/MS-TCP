@@ -9,4 +9,8 @@
 #include<string.h>
 #include<errno.h>
 
+#include<math.h>
+
+#define max( a, b ) ( ( a > b) ? a : b )
+
 #endif

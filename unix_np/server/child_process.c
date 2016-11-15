@@ -13,7 +13,7 @@ again:
     while((n = recv(sockfd,recv_buf,MAXLINE,0) > 0))
     {
         printf("server recv %s len %ldl\n",recv_buf,n);
-        send(sockfd,recv_buf,n+1,0);
+        send(sockfd,recv_buf,strlen(recv_buf),0);
     }
     if(n<0 && errno == EINTR)
     {

@@ -13,7 +13,7 @@ int main(int argc,char **argv)
     struct sockaddr_in servaddr;
     int i,sockfd,sockf[5];
 
-    for(i =0; i < 5; i++)
+    for(i =0; i < 1; i++)
     {
         sockf[i] = socket(AF_INET,SOCK_STREAM,0);
         bzero(&servaddr,sizeof(servaddr));

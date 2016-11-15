@@ -5,18 +5,34 @@
 void str_cli(FILE *fp,int sockfd)
 {
     char sendline[MAXLINE],recvline[MAXLINE];
+    int maxfd;
+    fd_set rset;
 
-    while(fgets(sendline,MAXLINE,fp) != NULL)
+    for(;;)
     {
-        send(sockfd,sendline,strlen(sendline),0);
-        printf("send %s\n",sendline);
+        FD_ZERO(&rset);
+        FD_SET(fileno(fp),&rset);
+        FD_SET(sockfd,&rset);
+        maxfd = max(fileno(fp),sockfd)+1;
+        select(maxfd,&rset,NULL,NULL,NULL);
 
-        if(recv(sockfd,recvline,MAXLINE,0) == 0)
+        if(FD_ISSET(sockfd,&rset))
         {
-            printf("str_cli:server terminated\n");
-            exit(0);
+            if(recv(sockfd,recvline,MAXLINE,0) ==0)
+            {
+                perror("recv");
+                exit(0);
+            }
+            fputs(recvline,stdout);
         }
-        printf("revc %s\n",recvline);
-        fputs(recvline,stdout);
+
+        if(FD_ISSET(fileno(fp),&rset))
+        {
+            if(fgets(sendline,MAXLINE,fp) ==NULL)
+            {
+                return;
+            }
+            send(sockfd,sendline,strlen(sendline),0);
+        }
     }
 }

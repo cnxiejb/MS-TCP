@@ -50,13 +50,15 @@ int main(int argc,char **argv)
         if(FD_ISSET(listenfd,&rset))
         {
             chilen = sizeof(childaddr);
-            connfd = accept(listenfd,(struct sockaddr *)&childaddr,&chilen);
-            if(errno == EINTR)
-                continue;
-            else
+            if((connfd = accept(listenfd,(struct sockaddr *)&childaddr,&chilen)) < 0)
             {
-                perror("accept");
-                exit(-1);
+                if(errno == EINTR)
+                    continue;
+                else
+                {
+                    perror("accept");
+                    exit(-1);
+                }
             }
             for(i=0; i < FD_SETSIZE; i++)
             {
@@ -80,40 +82,42 @@ int main(int argc,char **argv)
             if(--nready < 0)
                 continue;
         }
-        for(i=0;i < maxi;i++)
+        for(i=0; i < maxi; i++)
         {
             if(client[i] < 0)
                 continue;
-           if(FD_ISSET(client[i],&rset))
-           {
-               if((n = recv(client[i],recv_buf,MAXLINE,0))==0){
-                   close(client[i]);
-                   FD_CLR(client[i],&allset);
-                   client[i]=-1;
-               }else
-                   send(client[i],recv_buf,strlen(recv_buf),0);
-               if(--nready < 0)
-                   break;
-           }
+            if(FD_ISSET(client[i],&rset))
+            {
+                if((n = recv(client[i],recv_buf,MAXLINE,0))==0)
+                {
+                    close(client[i]);
+                    FD_CLR(client[i],&allset);
+                    client[i]=-1;
+                }
+                else
+                    send(client[i],recv_buf,strlen(recv_buf),0);
+                if(--nready < 0)
+                    break;
+            }
         }
         /*if((childpid=fork()) == 0) //child process*/
         /*{*/
-            /*close(listenfd);*/
-            /*str_echo(connfd);*/
-            /*close(connfd);*/
-            /*exit(0);*/
+        /*close(listenfd);*/
+        /*str_echo(connfd);*/
+        /*close(connfd);*/
+        /*exit(0);*/
         /*}*/
         /*else*/
         /*{*/
-            /*char peer_ip[INET_ADDRSTRLEN];*/
-            /*bzero(peer_ip,INET_ADDRSTRLEN);*/
-            /*if(inet_ntop(AF_INET,&(childaddr.sin_addr),peer_ip,INET_ADDRSTRLEN) <= 0)*/
-            /*{*/
-                /*printf("inet_ntop erro \n");*/
-                /*return -2;*/
-            /*}*/
-            /*printf("connect from address: %s\n",peer_ip);*/
-            /*close(connfd);*/
+        /*char peer_ip[INET_ADDRSTRLEN];*/
+        /*bzero(peer_ip,INET_ADDRSTRLEN);*/
+        /*if(inet_ntop(AF_INET,&(childaddr.sin_addr),peer_ip,INET_ADDRSTRLEN) <= 0)*/
+        /*{*/
+        /*printf("inet_ntop erro \n");*/
+        /*return -2;*/
+        /*}*/
+        /*printf("connect from address: %s\n",peer_ip);*/
+        /*close(connfd);*/
         /*}*/
 
     }

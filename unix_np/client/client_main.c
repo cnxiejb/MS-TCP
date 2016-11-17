@@ -7,30 +7,16 @@
 #include "child_process.h"
 #include "sys_define.h"
 #include "sys_network.h"
+#include "transport.h"
 
 int main(int argc,char **argv)
 {
-    struct sockaddr_in servaddr;
-    int i,sockfd,sockf[5];
-
-    for(i =0; i < 1; i++)
+    if(argc != 2)
     {
-        sockf[i] = socket(AF_INET,SOCK_STREAM,0);
-        bzero(&servaddr,sizeof(servaddr));
-        servaddr.sin_family = AF_INET;
-        servaddr.sin_port = htons(SERV_PORT);
-        if(inet_pton(AF_INET,argv[1],&servaddr.sin_addr) <= 0)
-        {
-            perror("inet_pton");
-            return -1;
-        }
-        if(connect(sockf[i],(struct sockaddr *)&servaddr,sizeof(servaddr)) < 0)
-        {
-            perror("connect");
-            return -2;
-        }
+        printf("no server ip addr\n");
+        exit(1);
     }
 
-    str_cli(stdin,sockf[0]);
-    exit(0);
+    udp_client(argv[1]);
+    return 0;
 }

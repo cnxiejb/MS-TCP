@@ -31,3 +31,16 @@ again:
         exit(0);
     }
 }
+void dg_echo(int sockfd,struct sockaddr *addr,socklen_t size)
+{
+   int n;
+   socklen_t len;
+   char mesg[MAXLINE];
+
+   for(;;)
+   {
+       len = size;
+       n = recvfrom(sockfd,mesg,MAXLINE,0,addr,&len);
+       sendto(sockfd,mesg,strlen(mesg),0,addr,len);
+   }
+}

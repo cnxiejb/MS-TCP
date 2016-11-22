@@ -1,6 +1,6 @@
 #include "udp_server.h"
-#include "sys_define.h"
-#include "sys_network.h"
+#include "../common/sys_define.h"
+#include "../common/sys_network.h"
 #include "child_process.h"
 
 void udp_server_main()

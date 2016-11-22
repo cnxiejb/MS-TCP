@@ -1,8 +1,8 @@
-#include "sys_network.h"
-#include "sys_define.h"
+#include "../common/sys_network.h"
+#include "../common/sys_define.h"
 #include "child_process.h"
 #include "sys_signal.h"
-#include "sp_server.h"
+#include "tcp_server.h"
 #include "udp_server.h"
 
 int main(int argc,char **argv)

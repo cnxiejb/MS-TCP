@@ -1,4 +1,4 @@
-#include "sys_define.h"
+#include "../common/sys_define.h"
 #include "sys_signal.h"
 
 Sigfunc * signal(int signo,Sigfunc *func)

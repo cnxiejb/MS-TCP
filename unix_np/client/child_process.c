@@ -1,6 +1,4 @@
 #include "child_process.h"
-#include "sys_define.h"
-#include "sys_network.h"
 
 void str_cli(FILE *fp,int sockfd)
 {

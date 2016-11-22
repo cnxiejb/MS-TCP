@@ -1,6 +1,6 @@
-#include "sys_define.h"
-#include "sys_network.h"
-#include "sp_server.h"
+#include "../common/sys_define.h"
+#include "../common/sys_network.h"
+#include "tcp_server.h"
 #include <limits.h>
 
 void poll_server_main()

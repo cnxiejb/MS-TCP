@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 2.6)
+aux_source_directory(. SRC_LIST)
+set(LIBRARY_OUTPUT_PATH ../bin)
+add_library(xSocket_static STATIC ${SRC_LIST})
+set_target_properties(xSocket_static PROPERTIES OUTPUT_NAME "xSocket")
+add_library(xSocket SHARED ${SRC_LIST})

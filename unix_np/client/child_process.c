@@ -55,12 +55,19 @@ void dg_cli(FILE *fp,int sockfd,struct sockaddr *addr,socklen_t len)
 {
     int n;
     char mesg[MAXLINE],recvline[MAXLINE +1];
+    if(connect(sockfd,addr,len) < 0)
+    {
+        perror("connect");
+        exit(-1);
+    }
 
     while(fgets(mesg,MAXLINE,fp) !=NULL)
     {
-        sendto(sockfd,mesg,strlen(mesg),0,addr,len);
+        /*sendto(sockfd,mesg,strlen(mesg),0,addr,len);*/
+        send(sockfd,mesg,strlen(mesg),0);
 
-        n = recvfrom(sockfd,recvline,MAXLINE,0,NULL,NULL);
+        /*n = recvfrom(sockfd,recvline,MAXLINE,0,NULL,NULL);*/
+        n=recv(sockfd,recvline,MAXLINE,0);
 
         recvline[n] =0;
         fputs(recvline,stdout);

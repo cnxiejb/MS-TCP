@@ -39,11 +39,7 @@ void udp_client(char *ipaddr)
         perror("inet_pton");
         exit(1);
     }
-/*    if(connect(sockfd,(struct sockaddr *)&servaddr,sizeof(servaddr)) < 0)*/
-    /*{*/
-        /*perror("connect");*/
-        /*exit(1);*/
-    /*}*/
+
     dg_cli(stdin,sockfd,(struct sockaddr *)&servaddr,sizeof(servaddr));;
     exit(0);    
 }

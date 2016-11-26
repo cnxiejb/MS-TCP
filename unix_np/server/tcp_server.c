@@ -1,6 +1,7 @@
-#include "sys_define.h"
-#include "sys_network.h"
-#include "sp_server.h"
+#include "../common/sys_define.h"
+#include "../common/sys_network.h"
+#include "tcp_server.h"
+#include "../xlib/sys_signal.h"
 #include <limits.h>
 
 void poll_server_main()
@@ -133,7 +134,7 @@ void select_server_main()
         exit(1);
     }
     listen(listenfd,LISTENQ);
-    /*signal(SIGCHLD,sig_child);//signal function*/
+    signal(SIGCHLD,sig_child);//signal function
     maxfd = listenfd;
     maxi= -1;
     for(i=0; i< FD_SETSIZE; i++)

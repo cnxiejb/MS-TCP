@@ -5,8 +5,6 @@
 	> Created Time: 四 11/10 15:13:22 2016
  ************************************************************************/
 #include "child_process.h"
-#include "sys_define.h"
-#include "sys_network.h"
 #include "transport.h"
 
 int main(int argc,char **argv)

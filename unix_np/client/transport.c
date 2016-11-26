@@ -1,5 +1,5 @@
-#include "sys_define.h"
-#include "sys_network.h"
+#include "../common/sys_define.h"
+#include "../common/sys_network.h"
 #include "transport.h"
 #include "child_process.h"
 

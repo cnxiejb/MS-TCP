@@ -1,8 +1,6 @@
-#include <stdlib.h>
-#include <stdio.h>
 #include "child_process.h"
-#include "sys_define.h"
-#include "sys_network.h"
+#include "../common/sys_define.h"
+#include "../common/sys_network.h"
 
 void str_echo(int sockfd)
 {

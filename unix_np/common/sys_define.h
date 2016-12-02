@@ -21,4 +21,6 @@
 #define INFTIM -1
 #endif
 
+typedef struct sockaddr SA;
+#define UNIXSTR_PATH "/tmp/unix.str"
 #endif

@@ -24,7 +24,7 @@ int connect_nonb(int sockfd,const SA *saptr,socklen_t salen,int nsec)
     tval.tv_sec= nsec;
     tval.tv_usec=0;
 
-    if((n=Select(sockfd+1,&rset,&wset,NULL, nsec ? &tval :NULL)) == 0){
+    if((n=Select(sockfd+1,&rset,&wset,NULL, nsec ? &tval :NULL)) == 0){//time out
         close(sockfd);
         errno=ETIMEDOUT;
         return -1;

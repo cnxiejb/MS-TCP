@@ -10,13 +10,13 @@ int connect_timeo(int sockfd,const SA * saptr,socklen_t salen,int nsec)
 
     sigfunc = signal(SIGALRM,connect_alarm);
     if(alarm(nsec) !=0)
-        perror("alarm");
+        err_msg("connect_timeo:alarm already set");
     if((n=connect(sockfd,saptr,salen)) < 0){
         close(sockfd);
         if(errno == EINTR)
             errno = ETIMEDOUT;
     }
-    alarm(0);
+    alarm(0);// close alarm
     signal(SIGALRM,sigfunc);
     return(n);
 }

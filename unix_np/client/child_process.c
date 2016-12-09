@@ -190,7 +190,8 @@ void str_cli_fork(FILE *fp,int sockfd)
     pid_t pid;
     char sendline[MAXLINE],recvline[MAXLINE];
 
-    if((pid = fork()) == 0){//child process
+    if((pid = fork()) == 0) //child process
+    {
         while(read(sockfd,recvline,MAXLINE) > 0)
             fputs(recvline,stdout);
         kill(getppid(),SIGTERM);
@@ -218,5 +219,85 @@ void dg_cli(FILE *fp,int sockfd,struct sockaddr *addr,socklen_t len)
 
         recvline[n] =0;
         fputs(recvline,stdout);
+    }
+}
+static void sig_alrm(int signo)
+{
+    return;
+}
+void dg_cli_timeo(FILE *fp,int sockfd,const SA *addr,socklen_t len)
+{
+    int n;
+    char mesg[MAXLINE],recvline[MAXLINE+1];
+
+    Sigfunc *func=signal(SIGALRM,sig_alrm);
+    while(fgets(mesg,MAXLINE,fp) != NULL)
+    {
+        sendto(sockfd,mesg,strlen(mesg),0,addr,len);
+
+        alarm(5);
+        if((n = recvfrom(sockfd,recvline,MAXLINE,0,NULL,NULL)) < 0)
+        {
+            if(errno ==EINTR)
+                fprintf(stderr,"socket timeout\n");
+            else
+                err_sys("recvfrom error");
+        }
+        else
+        {
+            alarm(0);
+            recvline[n]=0;
+            fputs(recvline,stdout);
+        }
+    }
+    signal(SIGALRM,func);
+}
+//use select for timeout
+void dg_cli_readable_timeo(FILE *fp,int sockfd,const SA *addr,socklen_t len)
+{
+    int n;
+    char mesg[MAXLINE],recvline[MAXLINE+1];
+
+    while(fgets(mesg,MAXLINE,fp) != NULL)
+    {
+        sendto(sockfd,mesg,strlen(mesg),0,addr,len);
+
+        if(readable_timeo(sockfd,5) == 0)
+            fprintf(stderr,"sockfd timeout\n");
+        else
+        {
+            n = recvfrom(sockfd,recvline,MAXLINE,0,NULL,NULL);
+            recvline[n]=0;
+            fputs(recvline,stdout);
+        }
+    }
+}
+void dg_cli_sockopt_timeo(FILE *fp,int sockfd,const SA *addr,socklen_t len)
+{
+    int n;
+    char mesg[MAXLINE],recvline[MAXLINE];
+    struct timeval tv;
+
+    tv.tv_sec=5;
+    tv.tv_usec=0;
+    setsockopt(sockfd,SOL_SOCKET,SO_RCVTIMEO,&tv,sizeof(tv));
+
+    while(fgets(mesg,MAXLINE,fp) != NULL)
+    {
+        sendto(sockfd,mesg,strlen(mesg),0,addr,len);
+        if((n=recvfrom(sockfd,recvline,MAXLINE,0,NULL,NULL)) < 0)
+        {
+            if(errno == EWOULDBLOCK)
+            {
+                fprintf(stderr,"socket recvfrom timeout\n");
+                continue;
+            }
+            else
+            {
+                err_sys("recvfrom error");
+            }
+            recvline[0]=0;
+            fputs(recvline,stdout);
+        }
     }
 }

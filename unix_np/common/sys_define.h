@@ -7,15 +7,15 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <string.h>
 
-#include <sys/select.h>
+#include <unistd.h>
+
 #include <time.h>
-#include <poll.h>
-#include<errno.h>
+#include <errno.h>
 
 #define max( a, b ) ( ( a > b) ? a : b )
+#define min( a, b ) ( ( a < b) ? a : b )
 
 #ifndef INFTIM
 #define INFTIM -1
@@ -23,4 +23,5 @@
 
 typedef struct sockaddr SA;
 #define UNIXSTR_PATH "/tmp/unix.str"
+
 #endif

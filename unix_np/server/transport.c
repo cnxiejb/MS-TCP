@@ -239,7 +239,6 @@ void udp_server_main()
 
     bind(sockfd,(struct sockaddr *)&servaddr,sizeof(servaddr));
     dg_echo(sockfd,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
-
 }
 void unix_domin_server_main01(int argc,char **argv)
 {

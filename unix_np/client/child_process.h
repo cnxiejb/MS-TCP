@@ -11,4 +11,7 @@ void str_cli_fork(FILE *fp,int sockfd);
 void str_cli_thread();
 
 void dg_cli(FILE *fp,int sockfd,struct sockaddr *addr,socklen_t size);
+void dg_cli_timeo(FILE *fp,int sockfd,const SA * addr,socklen_t size);
+void dg_cli_readable_timeo(FILE *fp,int sockfd,const SA *,socklen_t size);
+void dg_cli_sockopt_timeo(FILE *fp,int sockfd,const SA *,socklen_t size);
 #endif

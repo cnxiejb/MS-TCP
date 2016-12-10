@@ -9,12 +9,13 @@
 
 int main(int argc,char **argv)
 {
-    if(argc != 2)
-    {
-        printf("no server ip addr\n");
-        exit(1);
-    }
+/*    if(argc != 2)*/
+    /*{*/
+        /*printf("no server ip addr\n");*/
+        /*exit(1);*/
+    /*}*/
 
-    udp_client(argv[1]);
+    /*udp_client(argv[1]);*/
+    unix_domin_tcp_client();
     return 0;
 }

@@ -22,7 +22,7 @@ void tcp_client(char *ipaddr)
         perror("connect");
         exit(1);
     }
-    str_cli(stdin,sockfd);
+    str_cli_select_block(stdin,sockfd);
     exit(0);
 }
 void udp_client(char *ipaddr)
@@ -42,4 +42,18 @@ void udp_client(char *ipaddr)
 
     dg_cli(stdin,sockfd,(struct sockaddr *)&servaddr,sizeof(servaddr));;
     exit(0);    
+}
+void unix_domin_tcp_client()
+{
+    int sockfd;
+    struct sockaddr_un seraddr;
+
+    sockfd=socket(AF_LOCAL,SOCK_STREAM,0);
+
+    bzero(&seraddr,sizeof(seraddr));
+    seraddr.sun_family=AF_LOCAL;
+    strcpy(seraddr.sun_path,UNIXSTR_PATH);
+
+    connect(sockfd,(SA *)&seraddr,sizeof(seraddr));
+    str_cli_select_block(stdin,sockfd);
 }

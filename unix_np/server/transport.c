@@ -1,6 +1,7 @@
 #include "../common/sys_define.h"
 #include "../common/sys_network.h"
-#include "tcp_server.h"
+#include "transport.h"
+#include "child_process.h"
 #include "../xlib/sys_signal.h"
 #include <limits.h>
 
@@ -104,7 +105,6 @@ void poll_server_main()
         }
     }
 }
-
 void select_server_main()
 {
     int listenfd,connfd;
@@ -224,4 +224,86 @@ void select_server_main()
         }
     }
     close(listenfd);
+}
+void udp_server_main()
+{
+    int sockfd;
+    struct sockaddr_in servaddr,cliaddr;
+    
+    sockfd = socket(AF_INET,SOCK_DGRAM,0);
+
+    bzero(&servaddr,sizeof(servaddr));
+    servaddr.sin_family = AF_INET;
+    servaddr.sin_port = htons(SERV_PORT);
+    servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+
+    bind(sockfd,(struct sockaddr *)&servaddr,sizeof(servaddr));
+    dg_echo(sockfd,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
+}
+void unix_domin_server_main01(int argc,char **argv)
+{
+    int sockfd;
+    socklen_t len;
+    struct sockaddr_un addr1,addr2;
+
+    if(argc !=2)
+    {
+        printf("no path name");
+        exit(-1);
+    }
+    sockfd=socket(AF_LOCAL,SOCK_STREAM,0);
+    
+    unlink(argv[1]);
+    bzero(&addr1,sizeof(addr1));
+    addr1.sun_family=AF_LOCAL;
+    strncpy(addr1.sun_path,argv[1],sizeof(addr1.sun_path)-1);
+    bind(sockfd,(SA *)&addr1,SUN_LEN(&addr1));
+
+    len = sizeof(addr2);
+    getsockname(sockfd,(SA *)&addr2,&len);
+    printf("bound name = %s,returned len = %d\n",addr1.sun_path,len);
+    exit(0);
+}
+void unix_domin_server_main02()
+{
+    int listenfd,connfd;
+    pid_t childpid;
+    socklen_t chilen;
+    struct sockaddr_un servaddr,cliaddr;
+    
+    listenfd=socket(AF_LOCAL,SOCK_STREAM,0);
+
+    unlink(UNIXSTR_PATH);
+    bzero(&servaddr,sizeof(servaddr));
+    servaddr.sun_family=AF_LOCAL;
+    strcpy(servaddr.sun_path,UNIXSTR_PATH);
+
+    bind(listenfd,(SA *)&servaddr,sizeof(servaddr));
+    listen(listenfd,LISTENQ);
+
+    signal(SIGCHLD,sig_child);
+
+    for(;;)
+    {
+        chilen = sizeof(cliaddr);
+        if((connfd=accept(listenfd,(SA *)&cliaddr,&chilen)) < 0)
+        {
+            if(errno== EINTR)
+                continue;
+            else
+            {
+                perror("accept");
+                exit(-1);
+            }
+        }
+        if((childpid = fork()) ==0){
+            close(listenfd);
+            str_echo(connfd);
+            exit(0);
+        }
+        else{
+            close(connfd);
+        }
+    }
+    exit(0);
 }

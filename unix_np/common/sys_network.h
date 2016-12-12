@@ -17,4 +17,9 @@
 #include <netdb.h>
 //for ioctl
 #include <sys/ioctl.h>
+//for data link
+#include <net/if_dl.h>
+//for route
+#include <net/route.h>
+
 #endif

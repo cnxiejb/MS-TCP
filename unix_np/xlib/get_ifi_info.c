@@ -33,6 +33,7 @@ struct ifi_info *get_ifi_info(int family,int doaliases)
         len += 10 *sizeof(struct ifreq);
         free(buf);
     }
+    printf("len = %d\n",len);
     ifihead = NULL;
     ifipnext = &ifihead;
     lastname[0] = 0;
@@ -69,6 +70,7 @@ struct ifi_info *get_ifi_info(int family,int doaliases)
             hlen = sdl->sdl_alen;
         }
 #endif
+        printf("familey = %d && family = %d\n",ifr->ifr_addr.sa_family,family);
         if(ifr->ifr_addr.sa_family != family)
             continue;
         myflags = 0;
@@ -84,6 +86,7 @@ struct ifi_info *get_ifi_info(int family,int doaliases)
 
         ifrcopy = *ifr;
         ioctl(sockfd,SIOCGIFCONF,&ifrcopy);
+        printf("flags & IFF_UP\n");
         flags = ifrcopy.ifr_flags;
         if((flags & IFF_UP) == 0)
             continue;
@@ -113,6 +116,7 @@ struct ifi_info *get_ifi_info(int family,int doaliases)
         switch (ifr->ifr_addr.sa_family)
         {
         case AF_INET:
+            printf("AF_INET\n");
             sinptr = (struct sockaddr_in *)&ifr->ifr_addr;
             ifi->ifi_addr = (struct sockaddr *)calloc(1,sizeof(struct sockaddr_in));
             memcpy(ifi->ifi_addr,sinptr,sizeof(struct sockaddr_in));
@@ -138,6 +142,7 @@ struct ifi_info *get_ifi_info(int family,int doaliases)
             break;
 
         case AF_INET6:
+            printf("AF_INET6\n");
             sin6ptr = (struct sockaddr_in6 *)&ifr->ifr_addr;
             ifi->ifi_addr = (struct sockaddr *)calloc(1,sizeof(struct sockaddr_in6));
             memcpy(ifi->ifi_addr,sinptr,sizeof(struct sockaddr_in6));
@@ -161,6 +166,8 @@ struct ifi_info *get_ifi_info(int family,int doaliases)
             }
 #endif
             break;
+        default:
+            printf("default\n");
         }
     }
     free(buf);

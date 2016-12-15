@@ -19,6 +19,7 @@
 #include <sys/ioctl.h>
 //for data link
 #include <net/if_dl.h>
+#include <net/if.h>
 //for route
 #include <net/route.h>
 

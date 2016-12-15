@@ -7,10 +7,14 @@ set(CMAKE_BUILD_TYPE Release)
 #aux_source_directory(. SRC_LIST)
 set(HOST_SRC hostent.c)
 set(GET_IFI getifi.c)
+set(PRMAC prmac.c)
 
 get_filename_component(PARENT_DIR ${CMAKE_SOURCE_DIR} DIRECTORY)
 set(LIB_DIR ${PARENT_DIR}/xlib/bin)
 link_directories(${LIB_DIR})
+
+add_executable(prmac ${PRMAC})
+target_link_libraries(prmac xSocket)
 add_executable(getifi ${GET_IFI})
 target_link_libraries(getifi xSocket)
 

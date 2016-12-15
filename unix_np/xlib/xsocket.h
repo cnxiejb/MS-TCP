@@ -23,4 +23,6 @@ int web_main(int argc,char **argv);
 
 int Tcp_connect(const char *host,const char *serv);
 struct addrinfo * Host_serv(const char *host,const char *serv,int family,int socktype);
+
+char * sock_ntop(const struct sockaddr *sa,socklen_t salen);
 #endif

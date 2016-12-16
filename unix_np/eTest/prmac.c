@@ -17,7 +17,7 @@ int main(int argc,char **argv)
         sin = (struct sockaddr_in *)&arpreq.arp_pa;
         memcpy(sin,ifi->ifi_addr,sizeof(struct sockaddr_in));
 
-        if(ioctl(sockfd,SIOCGARP,&arpreq) < 0){
+        if(ioctl(sockfd,SIOCARPIPLL,&arpreq) < 0){
             err_ret("ioctl SIOCGARP");
             continue;
         }
